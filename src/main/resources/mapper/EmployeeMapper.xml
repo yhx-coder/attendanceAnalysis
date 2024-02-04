@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lincao.dao.EmployeeMapper">
+    <resultMap id="baseResultMap" type="com.lincao.pojo.Employee">
+        <id column="employee_id" jdbcType="INTEGER" property="employeeId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="ext" jdbcType="VARCHAR" property="ext"/>
+    </resultMap>
+
+    <insert id="addEmployee" parameterType="com.lincao.pojo.Employee">
+        insert into employee_information (`employee_id`, `name`, `ext`)
+        values (#{employeeId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{ext,jdbcType=VARCHAR})
+    </insert>
+
+    <select id="getEmployeeById" resultMap="baseResultMap">
+        select `employee_id`, `name`, `ext` from employee_information where `employee_id` = #{employeeId}
+    </select>
+
+    <select id="getAllEmployee" resultMap="baseResultMap">
+        select `employee_id`, `name`, `ext` from employee_information
+    </select>
+</mapper>

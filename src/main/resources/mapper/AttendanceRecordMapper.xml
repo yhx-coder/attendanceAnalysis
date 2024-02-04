@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lincao.dao.AttendanceRecordMapper">
+    <resultMap id="attendanceRecord" type="com.lincao.pojo.AttendanceRecord">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="employee_id" jdbcType="INTEGER" property="employeeId"/>
+        <result column="workday_date" jdbcType="DATE" property="workdayDate"/>
+        <result column="check_in_time" jdbcType="TIME" property="checkInTime"/>
+        <result column="check_out_time" jdbcType="TIME" property="checkOutTime"/>
+        <result column="is_full_attendance" jdbcType="BIT" property="isFullAttendance"/>
+        <result column="ext" jdbcType="VARCHAR" property="ext"/>
+    </resultMap>
+
+    <sql id="base_column_list">
+        `name`
+        ,`employee_id`,`workday_date`,
+        `check_in_time`,`check_out_time`,`ext`,is_full_attendance
+    </sql>
+
+    <select id="getAttendanceStatusOnDateForEmployee" resultMap="attendanceRecord">
+        select
+        id,
+        <include refid="base_column_list"/>
+        from employee_attendance
+        where workday_date=#{date} and employee_id= #{employeeId}
+    </select>
+
+    <insert id="addAttendanceRecord" parameterType="com.lincao.pojo.AttendanceRecord">
+        insert into employee_attendance(<include refid="base_column_list"/>)
+        values (#{name},#{employeeId},#{workdayDate},#{checkInTime},#{checkOutTime},#{ext},#{isFullAttendance})
+    </insert>
+
+    <update id="updateCheckOutTime" parameterType="com.lincao.pojo.AttendanceRecord">
+        update employee_attendance
+        set `check_out_time`= #{checkOutTime},
+            `is_full_attendance`= 1
+        where `id` = #{id}
+    </update>
+
+
+</mapper>
